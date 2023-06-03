@@ -17,11 +17,11 @@
           { address="64.225.24.98"; prefixLength=20; }
 { address="10.17.0.5"; prefixLength=16; }
         ];
-        ipv6.addresses = [
-          { address="fe80::e01c:21ff:fe13:8cf8"; prefixLength=64; }
-        ];
+        # ipv6.addresses = [
+        #   { address="fe80::e01c:21ff:fe13:8cf8"; prefixLength=64; }
+        # ];
         ipv4.routes = [ { address = "64.225.16.1"; prefixLength = 32; } ];
-        ipv6.routes = [ { address = ""; prefixLength = 128; } ];
+        # ipv6.routes = [ { address = ""; prefixLength = 128; } ];
       };
       
     };
