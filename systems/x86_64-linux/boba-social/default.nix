@@ -1,4 +1,4 @@
-{ ... }: {
+{ pkgs, ... }: {
   imports = [
     ./hardware.nix
 
@@ -9,6 +9,30 @@
   services.openssh.enable = true;
   services.tailscale.enable = true;
   services.redis.servers.boba-redis.enable = true;
+
+  users.users.root.openssh.authorizedKeys.keys = [
+    "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIHRad/cUomx3C2aMaLm+2qlFPLYH/T5is9EF9JFYfMKD" 
+  ];
+
+  users.users.msboba = {
+    isNormalUser = true;
+
+    name = "msboba";
+    initialPassword = "password";
+
+    home = "/home/msboba";
+    group = "users";
+  
+    shell = pkgs.zsh;
+
+    # wheel is needed for sudo
+    extraGroups = [ "wheel" ];
+
+    openssh.authorizedKeys.keys = [
+      "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIHRad/cUomx3C2aMaLm+2qlFPLYH/T5is9EF9JFYfMKD" 
+    ];
+
+  };
 
   # This value determines the NixOS release from which the default
   # settings for stateful data, like file locations and database versions
