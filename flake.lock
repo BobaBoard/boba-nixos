@@ -1,9 +1,49 @@
 {
   "nodes": {
+    "boba-backend": {
+      "inputs": {
+        "nixpkgs": "nixpkgs",
+        "systems": "systems"
+      },
+      "locked": {
+        "lastModified": 1685238963,
+        "narHash": "sha256-T6wnyBQE9xAKeWI2TfRUGevYwA8aeWnze0gj83GVQlc=",
+        "owner": "bobaboard",
+        "repo": "boba-backend",
+        "rev": "c6d3002aeb2be5b060aa3cd89230dd3f93dbd229",
+        "type": "github"
+      },
+      "original": {
+        "owner": "bobaboard",
+        "ref": "devenv",
+        "repo": "boba-backend",
+        "type": "github"
+      }
+    },
+    "boba-frontend": {
+      "inputs": {
+        "nixpkgs": "nixpkgs_2",
+        "systems": "systems_2"
+      },
+      "locked": {
+        "lastModified": 1685757903,
+        "narHash": "sha256-SDdBQjdgPYzI4dWSXpoHj2+em6YQ/UAq+nUCNOwDS8o=",
+        "owner": "jakehamilton",
+        "repo": "boba-frontend",
+        "rev": "00e4144c4e1d908aa3af2de10a89b197960f5a85",
+        "type": "github"
+      },
+      "original": {
+        "owner": "jakehamilton",
+        "ref": "hack/nix",
+        "repo": "boba-frontend",
+        "type": "github"
+      }
+    },
     "deploy-rs": {
       "inputs": {
         "flake-compat": "flake-compat",
-        "nixpkgs": "nixpkgs",
+        "nixpkgs": "nixpkgs_3",
         "utils": "utils"
       },
       "locked": {
@@ -87,6 +127,38 @@
     },
     "nixpkgs": {
       "locked": {
+        "lastModified": 1684171562,
+        "narHash": "sha256-BMUWjVWAUdyMWKk0ATMC9H0Bv4qAV/TXwwPUvTiC5IQ=",
+        "owner": "NixOS",
+        "repo": "nixpkgs",
+        "rev": "55af203d468a6f5032a519cba4f41acf5a74b638",
+        "type": "github"
+      },
+      "original": {
+        "owner": "NixOS",
+        "ref": "nixos-22.11",
+        "repo": "nixpkgs",
+        "type": "github"
+      }
+    },
+    "nixpkgs_2": {
+      "locked": {
+        "lastModified": 1685043448,
+        "narHash": "sha256-U3BwyDc2OzBcZ8tD09qXibyivgOtOQFTFCVgFyJ+6MM=",
+        "owner": "NixOS",
+        "repo": "nixpkgs",
+        "rev": "9886352ec9ab3945896ee8a4185e961fe29df209",
+        "type": "github"
+      },
+      "original": {
+        "owner": "NixOS",
+        "ref": "nixos-22.11",
+        "repo": "nixpkgs",
+        "type": "github"
+      }
+    },
+    "nixpkgs_3": {
+      "locked": {
         "lastModified": 1671417167,
         "narHash": "sha256-JkHam6WQOwZN1t2C2sbp1TqMv3TVRjzrdoejqfefwrM=",
         "owner": "NixOS",
@@ -101,7 +173,7 @@
         "type": "github"
       }
     },
-    "nixpkgs_2": {
+    "nixpkgs_4": {
       "locked": {
         "lastModified": 1677342105,
         "narHash": "sha256-kv1fpkfCJGb0M+LZaCHFUuIS9kRIwyVgupHu86Y28nc=",
@@ -119,8 +191,10 @@
     },
     "root": {
       "inputs": {
+        "boba-backend": "boba-backend",
+        "boba-frontend": "boba-frontend",
         "deploy-rs": "deploy-rs",
-        "nixpkgs": "nixpkgs_2",
+        "nixpkgs": "nixpkgs_4",
         "snowfall-lib": "snowfall-lib",
         "unstable": "unstable"
       }
@@ -144,6 +218,36 @@
       "original": {
         "owner": "snowfallorg",
         "repo": "lib",
+        "type": "github"
+      }
+    },
+    "systems": {
+      "locked": {
+        "lastModified": 1681028828,
+        "narHash": "sha256-Vy1rq5AaRuLzOxct8nz4T6wlgyUR7zLU309k9mBC768=",
+        "owner": "nix-systems",
+        "repo": "default",
+        "rev": "da67096a3b9bf56a91d16901293e51ba5b49a27e",
+        "type": "github"
+      },
+      "original": {
+        "owner": "nix-systems",
+        "repo": "default",
+        "type": "github"
+      }
+    },
+    "systems_2": {
+      "locked": {
+        "lastModified": 1681028828,
+        "narHash": "sha256-Vy1rq5AaRuLzOxct8nz4T6wlgyUR7zLU309k9mBC768=",
+        "owner": "nix-systems",
+        "repo": "default",
+        "rev": "da67096a3b9bf56a91d16901293e51ba5b49a27e",
+        "type": "github"
+      },
+      "original": {
+        "owner": "nix-systems",
+        "repo": "default",
         "type": "github"
       }
     },
