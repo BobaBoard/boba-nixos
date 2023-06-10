@@ -9,6 +9,7 @@
   services.openssh.enable = true;
   services.tailscale.enable = true;
   services.redis.servers.boba-redis.enable = true;
+  services.bobaboard.enable = true;
 
   users.users.root.openssh.authorizedKeys.keys = [
     "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIHRad/cUomx3C2aMaLm+2qlFPLYH/T5is9EF9JFYfMKD" 
