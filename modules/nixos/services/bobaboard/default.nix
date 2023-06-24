@@ -15,6 +15,15 @@ in
     networking.firewall.allowedTCPPorts = [
       4200
     ];
+
+    users = {
+      users.bobaboard = {
+        isSystemUser = true;
+        group = "bobaboard";
+      };
+
+      groups.bobaboard = {};
+    };
   
     systemd.services.bobabackend = {
       after = [ "network.target" ];
@@ -22,8 +31,8 @@ in
 
       serviceConfig = {
         Type = "simple";
-        User = "msboba";
-        Group = "msboba";
+        User = "bobaboard";
+        Group = "bobaboard";
         Restart = "always";
         RestartSec = 20;
         ExecStart = "${inputs.boba-backend.packages."${system}".default}/bin/bobaserver";
