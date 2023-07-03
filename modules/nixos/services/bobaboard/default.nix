@@ -60,12 +60,16 @@ in
       after = [ "postgres.service" ];
       wantedBy = [ "multi-user.target" ];
       path = [ pkgs.postgresql_12 ];
+      environment = {
+        POSTGRES_USER = "the_amazing_bobaboard";
+        POSTGRES_DB = "bobaboard_test";
+      };
 
       serviceConfig = {
         Type = "oneshot";
         User = "bobaboard";
         Group = "bobaboard";
-        ExecStart = "echo $PATH && ${inputs.boba-backend.packages."${system}".bobadatabase}/bin/bobadatabase";
+        ExecStart = "${inputs.boba-backend.packages."${system}".bobadatabase}/bin/bobadatabase";
       };
     };
   };
