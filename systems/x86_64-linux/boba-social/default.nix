@@ -12,6 +12,7 @@
   services.bobaboard.enable = true;
 
   programs.git.enable = true;
+  services.vscode-server.enable = true;
 
   users.users.root.openssh.authorizedKeys.keys = [
     "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIHRad/cUomx3C2aMaLm+2qlFPLYH/T5is9EF9JFYfMKD"
