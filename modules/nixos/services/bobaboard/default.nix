@@ -55,5 +55,17 @@ in
         ExecStart = "${inputs.boba-backend.packages."${system}".default}/bin/bobaserver";
       };
     };
+
+    systemd.services.bobadb = {
+      after = [ "postgres.service" ];
+      wantedBy = [ "multi-user.target" ];
+
+      serviceConfig = {
+        Type = "oneshot";
+        User = "bobaboard";
+        Group = "bobaboard";
+        ExecStart = "/bin/sh -c \"${inputs.boba-backend.packages."${system}".bobaserver-assets}/libexec/bobaserver/deps/bobaserver/db/init.sh\"";
+      };
+    };
   };
 }
