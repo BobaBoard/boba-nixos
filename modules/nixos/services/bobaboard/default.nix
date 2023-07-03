@@ -59,7 +59,7 @@ in
     systemd.services.bobadb = {
       after = [ "postgres.service" ];
       wantedBy = [ "multi-user.target" ];
-      path = [ pkgs.postgresql_12 ]
+      path = [ pkgs.postgresql_12 ];
 
       serviceConfig = {
         Type = "oneshot";
