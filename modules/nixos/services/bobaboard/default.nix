@@ -59,12 +59,13 @@ in
     systemd.services.bobadb = {
       after = [ "postgres.service" ];
       wantedBy = [ "multi-user.target" ];
+      path = [ pkgs.postgresql_12 ]
 
       serviceConfig = {
         Type = "oneshot";
         User = "bobaboard";
         Group = "bobaboard";
-        ExecStart = "/bin/sh -c \"${inputs.boba-backend.packages."${system}".bobaserver-assets}/libexec/bobaserver/deps/bobaserver/db/init.sh\"";
+        ExecStart = "echo $PATH && ${inputs.boba-backend.packages."${system}".bobadatabase}/bin/bobadatabase";
       };
     };
   };

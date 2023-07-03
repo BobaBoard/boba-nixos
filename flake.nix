@@ -5,6 +5,7 @@
     nixpkgs.url = "github:nixos/nixpkgs?rev=b1f87ca164a9684404c8829b851c3586c4d9f089";
     unstable.url = "github:nixos/nixpkgs/nixos-unstable";
     deploy-rs.url = "github:serokell/deploy-rs";
+    vscode-server.url = "github:nix-community/nixos-vscode-server";
     boba-backend.url = "github:bobaboard/boba-backend/devenv";
     boba-frontend.url = "github:jakehamilton/boba-frontend/hack/nix";
 
