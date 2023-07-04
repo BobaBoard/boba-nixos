@@ -35,7 +35,7 @@ in
         host all all 127.0.0.1/32 trust
         host all all ::1/128 trust
       '';
-      initialScript = pkgs.writeText "backend-initScript" ''
+      initialScript = pkgs.writeText "backend-init-script" ''
         CREATE ROLE the_amazing_bobaboard WITH LOGIN PASSWORD 'how_secure_can_this_db_be' CREATEDB;
         CREATE DATABASE bobaboard_test;
         GRANT ALL PRIVILEGES ON DATABASE bobaboard_test TO the_amazing_bobaboard;
