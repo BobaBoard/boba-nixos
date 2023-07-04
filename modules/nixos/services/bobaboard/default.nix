@@ -2,6 +2,7 @@
 
 let
   cfg = config.services.bobaboard;
+  bobabackend-packages = inputs.boba-backend.packages."${system}";
 
   inherit (lib) mkEnableOption mkIf;
 in
@@ -16,7 +17,6 @@ in
       4200
     ];
     
-
     users = {
       users.bobaboard = {
         isSystemUser = true;
@@ -40,8 +40,8 @@ in
         CREATE DATABASE bobaboard_test;
         GRANT ALL PRIVILEGES ON DATABASE bobaboard_test TO the_amazing_bobaboard;
       '';
-  };
-  
+    };
+    
     systemd.services.bobabackend = {
       after = [ "network.target" ];
       wantedBy = [ "multi-user.target" ];
@@ -52,14 +52,14 @@ in
         Group = "bobaboard";
         Restart = "always";
         RestartSec = 20;
-        ExecStart = "${inputs.boba-backend.packages."${system}".default}/bin/bobaserver";
+        ExecStart = "${bobabackend-packages.default}/bin/bobaserver";
       };
     };
 
     systemd.services.bobadb = {
-      after = [ "postgres.service" ];
+      after = [ "postgresql.service" ];
       wantedBy = [ "multi-user.target" ];
-      path = [ pkgs.postgresql_12 ];
+      path = [ pkgs.postgresql_12 pkgs.bash ];
       environment = {
         POSTGRES_USER = "the_amazing_bobaboard";
         POSTGRES_DB = "bobaboard_test";
@@ -69,7 +69,7 @@ in
         Type = "oneshot";
         User = "bobaboard";
         Group = "bobaboard";
-        ExecStart = "${inputs.boba-backend.packages."${system}".bobadatabase}/bin/bobadatabase";
+        ExecStart = "${bobabackend-packages.bobaserver-assets}/libexec/bobaserver/deps/bobaserver/db/init.sh ${bobabackend-packages.bobaserver-assets}/libexec/bobaserver/deps/bobaserver/db";
       };
     };
   };

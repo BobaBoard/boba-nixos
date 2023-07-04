@@ -6,11 +6,11 @@
         "systems": "systems"
       },
       "locked": {
-        "lastModified": 1688504283,
-        "narHash": "sha256-bHnFkJLL606rG8k86EZmv3wZxtOymTryU6YqZqh7Bxo=",
+        "lastModified": 1688513781,
+        "narHash": "sha256-h+hIuZtvmlJN9ZIixOAG8zuY4uRozj5di3eX7Ej0Qa0=",
         "owner": "bobaboard",
         "repo": "boba-backend",
-        "rev": "c2cdb90ea869aa83282c3255fd2ac47dc47a6157",
+        "rev": "d000dda0258a33ef7fd18e753303b5910f003a99",
         "type": "github"
       },
       "original": {
