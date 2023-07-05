@@ -41,10 +41,26 @@ in
         GRANT ALL PRIVILEGES ON DATABASE bobaboard_test TO the_amazing_bobaboard;
       '';
     };
+
+
+    services.redis.servers.boba-redis = {
+      enable = true;
+      port = 6379;
+    };
     
     systemd.services.bobabackend = {
       after = [ "network.target" ];
       wantedBy = [ "multi-user.target" ];
+      environment = {
+        POSTGRES_USER="the_amazing_bobaboard";
+        POSTGRES_PASSWORD="how_secure_can_this_db_be";
+        POSTGRES_DB="bobaboard_test";
+        POSTGRES_PORT="5432";
+        GOOGLE_APPLICATION_CREDENTIALS_PATH="/var/lib/bobaboard/firebase-sdk.json";
+        FORCED_USER="c6HimTlg2RhVH3fC1psXZORdLcx2";
+        REDIS_HOST="127.0.0.1";
+        REDIS_PORT="6379";
+      };
 
       serviceConfig = {
         Type = "simple";

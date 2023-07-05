@@ -9,7 +9,6 @@
 
   services.openssh.enable = true;
   services.tailscale.enable = true;
-  services.redis.servers.boba-redis.enable = true;
   services.bobaboard.enable = true;
 
   programs.git.enable = true;
