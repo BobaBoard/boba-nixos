@@ -11,8 +11,6 @@ in
     enable = mkEnableOption "BobaBoard";
   };
   config = mkIf cfg.enable {
-    # @TODO(jakehamilton): Add configuration for BobaBoard here.
-
     networking.firewall.allowedTCPPorts = [
       4200
     ];
@@ -28,6 +26,7 @@ in
 
     services.postgresql = {
       enable = true;
+      # TODO: configure this with an option
       package = pkgs.postgresql_12;
       enableTCPIP = true;
       authentication = pkgs.lib.mkOverride 10 ''
@@ -43,7 +42,7 @@ in
     };
 
 
-    services.redis.servers.boba-redis = {
+    services.redis.servers.bobaboard = {
       enable = true;
       port = 6379;
     };
@@ -51,6 +50,7 @@ in
     systemd.services.bobabackend = {
       after = [ "network.target" ];
       wantedBy = [ "multi-user.target" ];
+      requires = [ "bobaboard-postgres-init.service" ];
       environment = {
         POSTGRES_USER="the_amazing_bobaboard";
         POSTGRES_PASSWORD="how_secure_can_this_db_be";
@@ -59,6 +59,7 @@ in
         GOOGLE_APPLICATION_CREDENTIALS_PATH="/var/lib/bobaboard/firebase-sdk.json";
         FORCED_USER="c6HimTlg2RhVH3fC1psXZORdLcx2";
         REDIS_HOST="127.0.0.1";
+        # TODO: swap this for the configured port in the redis service
         REDIS_PORT="6379";
       };
 
@@ -66,16 +67,17 @@ in
         Type = "simple";
         User = "bobaboard";
         Group = "bobaboard";
-        Restart = "always";
+        Restart = "on-failure";
+        StartLimitIntervalSec=30;
+        StartLimitBurst=2;
         RestartSec = 20;
         ExecStart = "${bobabackend-packages.default}/bin/bobaserver";
       };
     };
 
-    systemd.services.bobadb = {
+    systemd.services.bobaboard-postgres-init = {
       after = [ "postgresql.service" ];
       wantedBy = [ "multi-user.target" ];
-      path = [ pkgs.postgresql_12 pkgs.bash ];
       environment = {
         POSTGRES_USER = "the_amazing_bobaboard";
         POSTGRES_DB = "bobaboard_test";
