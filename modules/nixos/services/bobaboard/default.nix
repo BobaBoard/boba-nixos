@@ -88,7 +88,19 @@ in
         User = "bobaboard";
         Group = "bobaboard";
         ExecStart = "${bobabackend-packages.bobadatabase}/bin/bobadatabase";
+        
+        # Uncomment this to have the script re-run when boba-server restarts
+        # RemainAfterExit = "yes";
       };
+
+      # Only run the script if the .migrate file is not present
+      # Remove ExecStart when enabling this
+      # script = ''
+      #   if ! [ -f /var/lib/bobaboard/.migrate ]; then
+      #     touch /var/lib/bobaboard/.migrate
+      #     ${bobabackend-packages.bobadatabase}/bin/bobadatabase
+      #   fi
+      # '';
     };
   };
 }
