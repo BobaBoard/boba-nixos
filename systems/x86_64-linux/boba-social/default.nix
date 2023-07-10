@@ -1,8 +1,6 @@
 { pkgs, inputs,  ... }: {
   imports = [
     ./hardware.nix
-    inputs.vscode-server.nixosModules.default
-
     # Generated at runtime by nixos-infect
     ./networking.nix
   ];

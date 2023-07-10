@@ -4,10 +4,24 @@
   inputs = {
     nixpkgs.url = "github:nixos/nixpkgs?rev=b1f87ca164a9684404c8829b851c3586c4d9f089";
     unstable.url = "github:nixos/nixpkgs/nixos-unstable";
-    deploy-rs.url = "github:serokell/deploy-rs";
-    vscode-server.url = "github:nix-community/nixos-vscode-server";
-    boba-backend.url = "github:bobaboard/boba-backend/devenv";
-    boba-frontend.url = "github:jakehamilton/boba-frontend/hack/nix";
+  
+    deploy-rs = {
+      url = "github:serokell/deploy-rs";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+    
+    vscode-server = {
+      url = "github:nix-community/nixos-vscode-server";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+    boba-backend = {
+      url = "github:bobaboard/boba-backend/devenv";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+    boba-frontend = {
+      url = "github:jakehamilton/boba-frontend/hack/nix";
+      inputs.nixpkgs.follows = "nixpkgs";
+     };
 
     snowfall-lib = {
       url = "github:snowfallorg/lib";
@@ -32,6 +46,10 @@
           };
         };
       };
+  
+      systems.modules = with inputs; [
+        vscode-server.nixosModules.default
+      ];
 
       # These checks will run before deployment to check that everything
       # is configured correctly.
