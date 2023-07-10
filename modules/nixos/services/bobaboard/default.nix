@@ -87,7 +87,7 @@ in
         Type = "oneshot";
         User = "bobaboard";
         Group = "bobaboard";
-        ExecStart = "${bobabackend-packages.bobaserver-assets}/libexec/bobaserver/deps/bobaserver/db/init.sh ${bobabackend-packages.bobaserver-assets}/libexec/bobaserver/deps/bobaserver/db";
+        ExecStart = "${bobabackend-packages.bobadatabase}/bin/bobadatabase";
       };
     };
   };
