@@ -60,7 +60,7 @@ in
         FORCED_USER="c6HimTlg2RhVH3fC1psXZORdLcx2";
         REDIS_HOST="127.0.0.1";
         # TODO: swap this for the configured port in the redis service
-        REDIS_PORT="6379";
+        REDIS_PORT=builtins.toString config.services.redis.servers.bobaboard.port;
       };
 
       serviceConfig = {
