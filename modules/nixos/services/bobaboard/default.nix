@@ -46,6 +46,23 @@ in
       enable = true;
       port = 6379;
     };
+
+    systemd.services.boba-frontend = {
+      after = [ "network.target" ];
+      wantedBy = [ "multi-user.target" ];
+      requires = [ "bobabackend.service" ];
+
+      serviceConfig = {
+        Type = "simple";
+        User = "bobaboard";
+        Group = "bobaboard";
+        Restart = "on-failure";
+        StartLimitIntervalSec=30;
+        StartLimitBurst=2;
+        RestartSec = 20;
+        ExecStart = "${bobabackend-packages.default}/bin/boba-frontend";
+      };
+    }
     
     systemd.services.bobabackend = {
       after = [ "network.target" ];
@@ -59,7 +76,6 @@ in
         GOOGLE_APPLICATION_CREDENTIALS_PATH="/var/lib/bobaboard/firebase-sdk.json";
         FORCED_USER="c6HimTlg2RhVH3fC1psXZORdLcx2";
         REDIS_HOST="127.0.0.1";
-        # TODO: swap this for the configured port in the redis service
         REDIS_PORT=builtins.toString config.services.redis.servers.bobaboard.port;
       };
 
