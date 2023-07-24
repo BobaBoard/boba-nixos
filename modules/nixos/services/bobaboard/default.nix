@@ -3,6 +3,7 @@
 let
   cfg = config.services.bobaboard;
   bobabackend-packages = inputs.boba-backend.packages."${system}";
+  bobafrontend-packages = inputs.boba-frontend.packages."${system}";
 
   inherit (lib) mkEnableOption mkIf;
 in
@@ -12,7 +13,9 @@ in
   };
   config = mkIf cfg.enable {
     networking.firewall.allowedTCPPorts = [
-      4200
+      80
+      443
+      6900
     ];
     
     users = {
@@ -51,18 +54,25 @@ in
       after = [ "network.target" ];
       wantedBy = [ "multi-user.target" ];
       requires = [ "bobabackend.service" ];
+      environment = {
+        # TODO: the PUBLIC variables will not take effect as they are swapped at build time.
+        NEXT_PUBLIC_RELEASE_SUBSCRIPTION_STRING_ID="a87800a6-21e5-46dd-a979-a901cdcea563";
+        NEXT_PUBLIC_RELEASE_THREAD_URL="/!memes/thread/2765f36a-b4f9-4efe-96f2-cb34f055d032";
+        DEFAULT_BACKEND="https://twisted-minds.bobaboard.com:6900/";
+      };
 
       serviceConfig = {
         Type = "simple";
         User = "bobaboard";
         Group = "bobaboard";
         Restart = "on-failure";
-        StartLimitIntervalSec=30;
-        StartLimitBurst=2;
-        RestartSec = 20;
-        ExecStart = "${bobabackend-packages.default}/bin/boba-frontend";
+        RestartSec=40;
+        ExecStart = "${bobafrontend-packages.default}/bin/boba-frontend";
       };
-    }
+
+      startLimitIntervalSec=30;
+      startLimitBurst=2;
+    };
     
     systemd.services.bobabackend = {
       after = [ "network.target" ];
@@ -84,11 +94,12 @@ in
         User = "bobaboard";
         Group = "bobaboard";
         Restart = "on-failure";
-        StartLimitIntervalSec=30;
-        StartLimitBurst=2;
-        RestartSec = 20;
+        RestartSec = 40;
         ExecStart = "${bobabackend-packages.default}/bin/bobaserver";
       };
+
+      startLimitIntervalSec=30;
+      startLimitBurst=2;
     };
 
     systemd.services.bobaboard-postgres-init = {
@@ -103,7 +114,7 @@ in
         Type = "oneshot";
         User = "bobaboard";
         Group = "bobaboard";
-        ExecStart = "${bobabackend-packages.bobadatabase}/bin/bobadatabase";
+        # ExecStart = "${bobabackend-packages.bobadatabase}/bin/bobadatabase";
         
         # Uncomment this to have the script re-run when boba-server restarts
         # RemainAfterExit = "yes";
@@ -111,12 +122,55 @@ in
 
       # Only run the script if the .migrate file is not present
       # Remove ExecStart when enabling this
-      # script = ''
-      #   if ! [ -f /var/lib/bobaboard/.migrate ]; then
-      #     touch /var/lib/bobaboard/.migrate
-      #     ${bobabackend-packages.bobadatabase}/bin/bobadatabase
-      #   fi
-      # '';
+      script = ''
+        if ! [ -f /var/lib/bobaboard/.migrate ]; then
+          touch /var/lib/bobaboard/.migrate
+          ${bobabackend-packages.bobadatabase}/bin/bobadatabase
+        fi
+      '';
+    };
+
+    security.acme.acceptTerms = true;
+    security.acme.defaults.email = "essential.randomn3ss@gmail.com";
+    services.nginx = {
+      enable = true;
+      recommendedProxySettings = true;
+      recommendedTlsSettings = true;
+      virtualHosts."frontend" =  {
+        enableACME = true;
+        forceSSL = true;
+        serverName = "twisted-minds.bobaboard.com";
+        locations."/" = {
+          proxyPass = "http://127.0.0.1:3010";
+          proxyWebsockets = true; # needed if you need to use WebSocket
+          extraConfig =
+            # required when the target is also TLS server with multiple hosts
+            "proxy_ssl_server_name on;" +
+            # required when the server wants to use HTTP Authentication
+            "proxy_pass_header Authorization;"
+            ;
+        };
+      };
+      virtualHosts."backend" =  {
+        enableACME = true;
+        forceSSL = true;
+        listen = [{         
+          addr = "twisted-minds.bobaboard.com";
+          port = 6900;
+          ssl = true;
+        }];
+        serverName = "twisted-minds.bobaboard.com";
+        locations."/" = {
+          proxyPass = "http://127.0.0.1:4200";
+          proxyWebsockets = true; # needed if you need to use WebSocket
+          extraConfig =
+            # required when the target is also TLS server with multiple hosts
+            "proxy_ssl_server_name on;" +
+            # required when the server wants to use HTTP Authentication
+            "proxy_pass_header Authorization;"
+            ;
+        };
+      };
     };
   };
 }

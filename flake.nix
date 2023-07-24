@@ -19,7 +19,7 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
     boba-frontend = {
-      url = "github:bobaboard/boba-frontend/hack/nix";
+      url = "github:bobaboard/boba-frontend/nix-flake";
       inputs.nixpkgs.follows = "nixpkgs";
      };
 
