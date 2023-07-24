@@ -6,6 +6,7 @@
   ];
 
   services.openssh.enable = true;
+  # Might need to run `sudo tailscale up --ssh=false` if SSH hangs on update
   services.tailscale.enable = true;
   services.bobaboard.enable = true;
 

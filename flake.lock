@@ -24,22 +24,22 @@
     },
     "boba-frontend": {
       "inputs": {
+        "flake-utils": "flake-utils_2",
         "nixpkgs": [
           "nixpkgs"
-        ],
-        "systems": "systems_2"
+        ]
       },
       "locked": {
-        "lastModified": 1685757903,
-        "narHash": "sha256-SDdBQjdgPYzI4dWSXpoHj2+em6YQ/UAq+nUCNOwDS8o=",
-        "owner": "jakehamilton",
+        "lastModified": 1690154273,
+        "narHash": "sha256-c4JeQpL/60IFiCY1FPGK7+vLJuG7vZ1oVA9QoNOx+KE=",
+        "owner": "bobaboard",
         "repo": "boba-frontend",
-        "rev": "00e4144c4e1d908aa3af2de10a89b197960f5a85",
+        "rev": "f8583b0594c247106e5ba3921fab9762e25f2518",
         "type": "github"
       },
       "original": {
-        "owner": "jakehamilton",
-        "ref": "hack/nix",
+        "owner": "bobaboard",
+        "ref": "nix-flake",
         "repo": "boba-frontend",
         "type": "github"
       }
@@ -118,7 +118,7 @@
     },
     "flake-utils-plus": {
       "inputs": {
-        "flake-utils": "flake-utils_2"
+        "flake-utils": "flake-utils_3"
       },
       "locked": {
         "lastModified": 1657226504,
@@ -135,6 +135,24 @@
       }
     },
     "flake-utils_2": {
+      "inputs": {
+        "systems": "systems_2"
+      },
+      "locked": {
+        "lastModified": 1689068808,
+        "narHash": "sha256-6ixXo3wt24N/melDWjq70UuHQLxGV8jZvooRanIHXw0=",
+        "owner": "numtide",
+        "repo": "flake-utils",
+        "rev": "919d646de7be200f3bf08cb76ae1f09402b6f9b4",
+        "type": "github"
+      },
+      "original": {
+        "owner": "numtide",
+        "repo": "flake-utils",
+        "type": "github"
+      }
+    },
+    "flake-utils_3": {
       "locked": {
         "lastModified": 1644229661,
         "narHash": "sha256-1YdnJAsNy69bpcjuoKdOYQX0YxZBiCYZo4Twxerqv7k=",
@@ -149,7 +167,7 @@
         "type": "github"
       }
     },
-    "flake-utils_3": {
+    "flake-utils_4": {
       "inputs": {
         "systems": "systems_3"
       },
@@ -294,7 +312,7 @@
     },
     "vscode-server": {
       "inputs": {
-        "flake-utils": "flake-utils_3",
+        "flake-utils": "flake-utils_4",
         "nixpkgs": [
           "nixpkgs"
         ]
