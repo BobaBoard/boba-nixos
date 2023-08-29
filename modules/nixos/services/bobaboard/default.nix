@@ -13,6 +13,7 @@ in
   };
   config = mkIf cfg.enable {
     networking.firewall.allowedTCPPorts = [
+      #TODO: configure these with an option
       80
       443
       6900
@@ -37,6 +38,7 @@ in
         host all all 127.0.0.1/32 trust
         host all all ::1/128 trust
       '';
+      # TODO: add initial username/password configuration
       initialScript = pkgs.writeText "backend-init-script" ''
         CREATE ROLE the_amazing_bobaboard WITH LOGIN PASSWORD 'how_secure_can_this_db_be' CREATEDB;
         CREATE DATABASE bobaboard_test;
@@ -130,16 +132,16 @@ in
       '';
     };
 
-    security.acme.acceptTerms = true;
-    security.acme.defaults.email = "essential.randomn3ss@gmail.com";
     services.nginx = {
       enable = true;
       recommendedProxySettings = true;
       recommendedTlsSettings = true;
-      virtualHosts."frontend" =  {
+      virtualHosts."bobaboard-frontend" =  {
         enableACME = true;
         forceSSL = true;
+        # TODO: enable configuring the server name
         serverName = "twisted-minds.bobaboard.com";
+        # TODO: enable configuring the port
         locations."/" = {
           proxyPass = "http://127.0.0.1:3010";
           proxyWebsockets = true; # needed if you need to use WebSocket
@@ -151,16 +153,19 @@ in
             ;
         };
       };
-      virtualHosts."backend" =  {
+      virtualHosts."bobaboard-backend" =  {
         enableACME = true;
         forceSSL = true;
         listen = [{         
+          # TODO: enable configuring the server name
           addr = "twisted-minds.bobaboard.com";
           port = 6900;
           ssl = true;
         }];
+        # TODO: enable configuring the server name
         serverName = "twisted-minds.bobaboard.com";
         locations."/" = {
+          # TODO: enable configuring the server port
           proxyPass = "http://127.0.0.1:4200";
           proxyWebsockets = true; # needed if you need to use WebSocket
           extraConfig =
