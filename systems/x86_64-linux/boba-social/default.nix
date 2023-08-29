@@ -49,6 +49,9 @@
     ];
   };
 
+  security.acme.acceptTerms = true;
+  security.acme.defaults.email = "essential.randomn3ss@gmail.com";
+
   # This value determines the NixOS release from which the default
   # settings for stateful data, like file locations and database versions
   # on your system were taken. It‘s perfectly fine and recommended to leave
