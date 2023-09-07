@@ -10,6 +10,55 @@ in
 {
   options.services.bobaboard = {
     enable = mkEnableOption "BobaBoard";
+
+    database = {
+      name = mkOption {
+        type = types.str;
+        default = "bobadb";
+        description = lib.mdDoc "The name of the database to store data in.";
+      };
+
+      user = mkOption {
+        type = types.nullOr types.str;
+        default = "the_amazing_bobaboard";
+        description = lib.mdDoc "The database user to connect as.";
+      };
+
+      passwordFile = mkOption {
+        type = types.nullOr types.path;
+        default = null;
+        description = lib.mdDoc "The file to load the database password from.";
+      };
+
+      host = mkOption {
+        type = types.str;
+        default = "localhost";
+        description = lib.mdDoc "The database host to connect to.";
+      };
+
+      port = mkOption {
+        type = types.port;
+        default = 5432;
+        description = lib.mdDoc "The port used when connecting to the database host.";
+      };
+
+      # migrate = mkOption {
+      #   type = types.bool;
+      #   default = true;
+      #   description =
+      #     lib.mdDoc "Whether or not to automatically run migrations on startup.";
+      # };
+
+      # createLocally = mkOption {
+      #   type = types.bool;
+      #   default = false;
+      #   description = lib.mdDoc ''
+      #     When {option}`services.writefreely.database.type` is set to
+      #     `"mysql"`, this option will enable the MySQL service locally.
+      #   '';
+      # };
+    };
+
   };
   config = mkIf cfg.enable {
     networking.firewall.allowedTCPPorts = [
@@ -40,9 +89,9 @@ in
       '';
       # TODO: add initial username/password configuration
       initialScript = pkgs.writeText "backend-init-script" ''
-        CREATE ROLE the_amazing_bobaboard WITH LOGIN PASSWORD 'how_secure_can_this_db_be' CREATEDB;
-        CREATE DATABASE bobaboard_test;
-        GRANT ALL PRIVILEGES ON DATABASE bobaboard_test TO the_amazing_bobaboard;
+        CREATE ROLE ${cfg.database.user} WITH LOGIN PASSWORD 'how_secure_can_this_db_be' CREATEDB;
+        CREATE DATABASE ${cfg.database.name};
+        GRANT ALL PRIVILEGES ON DATABASE ${cfg.database.name} TO ${cfg.database.user};
       '';
     };
 
@@ -81,10 +130,10 @@ in
       wantedBy = [ "multi-user.target" ];
       requires = [ "bobaboard-postgres-init.service" ];
       environment = {
-        POSTGRES_USER="the_amazing_bobaboard";
+        POSTGRES_USER=cfg.database.user;
         POSTGRES_PASSWORD="how_secure_can_this_db_be";
-        POSTGRES_DB="bobaboard_test";
-        POSTGRES_PORT="5432";
+        POSTGRES_DB=${cfg.database.name};
+        POSTGRES_PORT=cfg.database.port;
         GOOGLE_APPLICATION_CREDENTIALS_PATH="/var/lib/bobaboard/firebase-sdk.json";
         FORCED_USER="c6HimTlg2RhVH3fC1psXZORdLcx2";
         REDIS_HOST="127.0.0.1";
@@ -108,8 +157,8 @@ in
       after = [ "postgresql.service" ];
       wantedBy = [ "multi-user.target" ];
       environment = {
-        POSTGRES_USER = "the_amazing_bobaboard";
-        POSTGRES_DB = "bobaboard_test";
+        POSTGRES_USER = cfg.database.user;
+        POSTGRES_DB = ${cfg.database.name};
       };
 
       serviceConfig = {
