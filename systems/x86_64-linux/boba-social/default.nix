@@ -8,6 +8,10 @@
   services.openssh.enable = true;
   # Might need to run `sudo tailscale up --ssh=false` if SSH hangs on update
   services.tailscale.enable = true;
+  networking.firewall.allowedTCPPorts = [
+    22
+  ];
+
   services.bobaboard = {
     enable = true;
     database = {
