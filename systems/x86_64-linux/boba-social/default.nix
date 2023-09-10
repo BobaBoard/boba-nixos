@@ -16,8 +16,8 @@
       port = 25060;
       database = "defaultdb";
       passwordFile = "/var/lib/bobaboard/db-password"
-    }
-  }
+    };
+  };
 
   programs.git.enable = true;
   programs.zsh = {
