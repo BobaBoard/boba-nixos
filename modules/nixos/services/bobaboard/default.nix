@@ -60,6 +60,7 @@ in
     };
 
   };
+
   config = mkIf cfg.enable {
     networking.firewall.allowedTCPPorts = [
       #TODO: configure these with an option
