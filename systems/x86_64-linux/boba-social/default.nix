@@ -8,7 +8,16 @@
   services.openssh.enable = true;
   # Might need to run `sudo tailscale up --ssh=false` if SSH hangs on update
   services.tailscale.enable = true;
-  services.bobaboard.enable = true;
+  services.bobaboard = {
+    enable = true;
+    database = {
+      name = "doadmin";
+      host = "private-db-postgresql-nyc3-75986-do-user-12927016-0.b.db.ondigitalocean.com";
+      port = 25060;
+      database = "defaultdb";
+      passwordFile = "/var/lib/bobaboard/db-password"
+    }
+  }
 
   programs.git.enable = true;
   programs.zsh = {
