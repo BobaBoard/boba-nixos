@@ -5,7 +5,7 @@ let
   bobabackend-packages = inputs.boba-backend.packages."${system}";
   bobafrontend-packages = inputs.boba-frontend.packages."${system}";
 
-  inherit (lib) mkEnableOption mkIf;
+  inherit (lib) mkEnableOption mkIf mkOption types;
 in
 {
   options.services.bobaboard = {
@@ -131,10 +131,14 @@ in
       wantedBy = [ "multi-user.target" ];
       requires = [ "bobaboard-postgres-init.service" ];
       environment = {
+        # TODO: move this to the backend flake
+        NODE_ENV="production";
         POSTGRES_USER=cfg.database.user;
-        POSTGRES_PASSWORD="how_secure_can_this_db_be";
-        POSTGRES_DB=${cfg.database.name};
-        POSTGRES_PORT=cfg.database.port;
+        # TODO: get this password file to read
+        POSTGRES_PASSWORD=builtins.readFile cfg.database.passwordFile;
+        POSTGRES_DB=cfg.database.name;
+        POSTGRES_HOST=cfg.database.host;
+        POSTGRES_PORT=builtins.toString cfg.database.port;
         GOOGLE_APPLICATION_CREDENTIALS_PATH="/var/lib/bobaboard/firebase-sdk.json";
         FORCED_USER="c6HimTlg2RhVH3fC1psXZORdLcx2";
         REDIS_HOST="127.0.0.1";
@@ -159,7 +163,7 @@ in
       wantedBy = [ "multi-user.target" ];
       environment = {
         POSTGRES_USER = cfg.database.user;
-        POSTGRES_DB = ${cfg.database.name};
+        POSTGRES_DB = cfg.database.name;
       };
 
       serviceConfig = {
@@ -206,7 +210,7 @@ in
       virtualHosts."bobaboard-backend" =  {
         enableACME = true;
         forceSSL = true;
-        listen = [{         
+        listen = [{
           # TODO: enable configuring the server name
           addr = "twisted-minds.bobaboard.com";
           port = 6900;

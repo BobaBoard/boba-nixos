@@ -15,11 +15,11 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
     boba-backend = {
-      url = "github:bobaboard/boba-backend/devenv";
+      url = "github:bobaboard/boba-backend/main";
       inputs.nixpkgs.follows = "nixpkgs";
     };
     boba-frontend = {
-      url = "github:bobaboard/boba-frontend/nix-flake";
+      url = "github:bobaboard/boba-frontend/main";
       inputs.nixpkgs.follows = "nixpkgs";
      };
 
