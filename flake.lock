@@ -8,16 +8,16 @@
         ]
       },
       "locked": {
-        "lastModified": 1694378305,
-        "narHash": "sha256-CLGmtwTk+8U2np1E0K08nO0IYerBEKpFVHTJpzbG/Pc=",
+        "lastModified": 1696723063,
+        "narHash": "sha256-swTmbXlX6tDKL4fy4tk5zLGBSVazegY9gE+7M6oM42U=",
         "owner": "bobaboard",
         "repo": "boba-backend",
-        "rev": "8b863296336f43f8c3338a4864908b8bd98fc041",
+        "rev": "ebef283d0cd35022c4efb32fe8b33b9be8314a86",
         "type": "github"
       },
       "original": {
         "owner": "bobaboard",
-        "ref": "main",
+        "ref": "more-nix",
         "repo": "boba-backend",
         "type": "github"
       }
