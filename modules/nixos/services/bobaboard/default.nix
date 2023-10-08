@@ -42,21 +42,16 @@ in
         description = lib.mdDoc "The port used when connecting to the database host.";
       };
 
-      # migrate = mkOption {
-      #   type = types.bool;
-      #   default = true;
-      #   description =
-      #     lib.mdDoc "Whether or not to automatically run migrations on startup.";
-      # };
+      sslrootcert = mkOption {
+        type = types.nullOr types.str;
+        default = null;
+        description = lib.mdDoc "A ssl certificate for the connection, if needed.";
+      };
+    };
 
-      # createLocally = mkOption {
-      #   type = types.bool;
-      #   default = false;
-      #   description = lib.mdDoc ''
-      #     When {option}`services.writefreely.database.type` is set to
-      #     `"mysql"`, this option will enable the MySQL service locally.
-      #   '';
-      # };
+    firebaseCredentials = mkOption {
+      type = types.str;
+      description = lib.mdDoc "Where the firebase credentials are strored.";
     };
 
   };
@@ -131,15 +126,12 @@ in
       wantedBy = [ "multi-user.target" ];
       requires = [ "bobaboard-postgres-init.service" ];
       environment = {
-        # TODO: move this to the backend flake
-        NODE_ENV="production";
         POSTGRES_USER=cfg.database.user;
-        # TODO: get this password file to read
-        POSTGRES_PASSWORD=builtins.readFile cfg.database.passwordFile;
         POSTGRES_DB=cfg.database.name;
         POSTGRES_HOST=cfg.database.host;
         POSTGRES_PORT=builtins.toString cfg.database.port;
-        GOOGLE_APPLICATION_CREDENTIALS_PATH="/var/lib/bobaboard/firebase-sdk.json";
+        POSTGRES_SSL_ROOT_CERT=builtins.toString cfg.database.sslrootcert;
+        GOOGLE_APPLICATION_CREDENTIALS_PATH=cfg.firebaseCredentials;
         FORCED_USER="c6HimTlg2RhVH3fC1psXZORdLcx2";
         REDIS_HOST="127.0.0.1";
         REDIS_PORT=builtins.toString config.services.redis.servers.bobaboard.port;
@@ -152,6 +144,7 @@ in
         Restart = "on-failure";
         RestartSec = 40;
         ExecStart = "${bobabackend-packages.default}/bin/bobaserver";
+        EnvironmentFile = cfg.database.passwordFile;
       };
 
       startLimitIntervalSec=30;
@@ -163,13 +156,16 @@ in
       wantedBy = [ "multi-user.target" ];
       environment = {
         POSTGRES_USER = cfg.database.user;
-        POSTGRES_DB = cfg.database.name;
+        POSTGRES_DB = cfg.database.name;        
+        POSTGRES_HOST=cfg.database.host;
+        POSTGRES_PORT=builtins.toString cfg.database.port;
       };
 
       serviceConfig = {
         Type = "oneshot";
         User = "bobaboard";
         Group = "bobaboard";
+        EnvironmentFile = cfg.database.passwordFile;
         # ExecStart = "${bobabackend-packages.bobadatabase}/bin/bobadatabase";
         
         # Uncomment this to have the script re-run when boba-server restarts
@@ -180,8 +176,8 @@ in
       # Remove ExecStart when enabling this
       script = ''
         if ! [ -f /var/lib/bobaboard/.migrate ]; then
-          touch /var/lib/bobaboard/.migrate
           ${bobabackend-packages.bobadatabase}/bin/bobadatabase
+          touch /var/lib/bobaboard/.migrate
         fi
       '';
     };

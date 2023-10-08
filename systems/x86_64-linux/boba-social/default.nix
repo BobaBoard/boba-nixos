@@ -16,11 +16,13 @@
     enable = true;
     database = {
       user = "bobaboard";
-      host = "private-db-postgresql-nyc3-75986-do-user-12927016-0.b.db.ondigitalocean.com";
+      host = "db-postgresql-nyc3-75986-do-user-12927016-0.b.db.ondigitalocean.com";
       port = 25060;
       name = "bobadb";
       passwordFile = "/var/lib/bobaboard/db-password";
+      sslrootcert = "/var/lib/bobaboard/db-ca";
     };
+    firebaseCredentials = "/var/lib/bobaboard/firebase-sdk.json";
   };
 
   programs.git.enable = true;
