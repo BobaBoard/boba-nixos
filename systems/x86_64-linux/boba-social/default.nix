@@ -21,7 +21,8 @@
       port = 25060;
       name = "bobadb";
       passwordFile = "/var/lib/bobaboard/db-password";
-      sslrootcert = "/var/lib/bobaboard/db-ca";
+      sslRootCertPath = "/var/lib/bobaboard/db-ca";
+      seed = true;
     };
     firebaseCredentials = "/var/lib/bobaboard/firebase-sdk.json";
   };
