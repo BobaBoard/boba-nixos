@@ -42,6 +42,12 @@ in
         description = lib.mdDoc "The port used when connecting to the database host.";
       };
 
+      local = mkOption {
+        type = types.bool;
+        default = true;
+        description = lib.mdDoc "Whether to start a local database.";
+      };
+
       sslrootcert = mkOption {
         type = types.nullOr types.str;
         default = null;
@@ -74,7 +80,7 @@ in
     };
 
     services.postgresql = {
-      enable = true;
+      enable = cfg.database.local;
       # TODO: configure this with an option
       package = pkgs.postgresql_12;
       enableTCPIP = true;
