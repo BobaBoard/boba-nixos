@@ -4,6 +4,7 @@ let
   cfg = config.services.bobaboard;
   bobabackend-packages = inputs.boba-backend.packages."${system}";
   bobafrontend-packages = inputs.boba-frontend.packages."${system}";
+  boolToString = b: if b then "true" else "false";
 
   inherit (lib) mkEnableOption mkIf mkOption types;
 in
@@ -48,10 +49,16 @@ in
         description = lib.mdDoc "Whether to start a local database.";
       };
 
-      sslrootcert = mkOption {
+      sslRootCertPath = mkOption {
         type = types.nullOr types.str;
         default = null;
         description = lib.mdDoc "A ssl certificate for the connection, if needed.";
+      };
+
+      seed = mkOption {
+        type = types.bool;
+        default = false;
+        description = lib.mdDoc "Whether to seed the DB upon first init";
       };
     };
 
@@ -136,7 +143,7 @@ in
         POSTGRES_DB=cfg.database.name;
         POSTGRES_HOST=cfg.database.host;
         POSTGRES_PORT=builtins.toString cfg.database.port;
-        POSTGRES_SSL_ROOT_CERT=builtins.toString cfg.database.sslrootcert;
+        POSTGRES_SSL_ROOT_CERT_PATH=builtins.toString cfg.database.sslRootCertPath;
         GOOGLE_APPLICATION_CREDENTIALS_PATH=cfg.firebaseCredentials;
         FORCED_USER="c6HimTlg2RhVH3fC1psXZORdLcx2";
         REDIS_HOST="127.0.0.1";
@@ -182,7 +189,10 @@ in
       # Remove ExecStart when enabling this
       script = ''
         if ! [ -f /var/lib/bobaboard/.migrate ]; then
-          ${bobabackend-packages.bobadatabase}/bin/bobadatabase
+          ${bobabackend-packages.bobadatabase.init}/bin/bobadatabase-init
+          if ${boolToString cfg.database.seed}; then
+            ${bobabackend-packages.bobadatabase.seed}/bin/bobadatabase-seed
+          fi
           touch /var/lib/bobaboard/.migrate
         fi
       '';
