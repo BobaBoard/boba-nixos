@@ -17,6 +17,7 @@
     database = {
       user = "bobaboard";
       host = "db-postgresql-nyc3-75986-do-user-12927016-0.b.db.ondigitalocean.com";
+      local = false;
       port = 25060;
       name = "bobadb";
       passwordFile = "/var/lib/bobaboard/db-password";
