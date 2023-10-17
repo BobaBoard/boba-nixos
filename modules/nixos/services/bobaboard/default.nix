@@ -189,9 +189,9 @@ in
       # Remove ExecStart when enabling this
       script = ''
         if ! [ -f /var/lib/bobaboard/.migrate ]; then
-          ${bobabackend-packages.bobadatabase.init}/bin/bobadatabase-init
+          ${bobabackend-packages.bobadatabase-init}/bin/bobadatabase-init
           if ${boolToString cfg.database.seed}; then
-            ${bobabackend-packages.bobadatabase.seed}/bin/bobadatabase-seed
+            ${bobabackend-packages.bobadatabase-seed}/bin/bobadatabase-seed
           fi
           touch /var/lib/bobaboard/.migrate
         fi

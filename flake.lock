@@ -8,11 +8,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1696807294,
-        "narHash": "sha256-Sg0sjow4U+VvJUiuaKEYb6Egjho9PolERmZZxhm2XNg=",
+        "lastModified": 1697501558,
+        "narHash": "sha256-EzJjyOJ8t5aoUSIXHI4x3mMTlveJpKfyoZudPOzDy2U=",
         "owner": "bobaboard",
         "repo": "boba-backend",
-        "rev": "7a74561873403358fa5620525d31dcb56477b35f",
+        "rev": "c17520aff542a9f0d6fa41b7ae941924915e45e4",
         "type": "github"
       },
       "original": {
