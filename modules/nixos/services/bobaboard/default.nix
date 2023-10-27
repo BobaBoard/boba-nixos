@@ -6,6 +6,11 @@ let
   bobafrontend-packages = inputs.boba-frontend.packages."${system}";
   boolToString = b: if b then "true" else "false";
 
+
+  optionalSeedScript = lib.optionalString cfg.database.seed ''
+    ${bobabackend-packages.bobadatabase-seed}/bin/bobadatabase-seed
+  '';
+
   inherit (lib) mkEnableOption mkIf mkOption types;
 in
 {
@@ -173,7 +178,6 @@ in
         POSTGRES_HOST=cfg.database.host;
         POSTGRES_PORT=builtins.toString cfg.database.port;
       };
-
       serviceConfig = {
         Type = "oneshot";
         User = "bobaboard";
@@ -190,9 +194,7 @@ in
       script = ''
         if ! [ -f /var/lib/bobaboard/.migrate ]; then
           ${bobabackend-packages.bobadatabase-init}/bin/bobadatabase-init
-          if ${boolToString cfg.database.seed}; then
-            ${bobabackend-packages.bobadatabase-seed}/bin/bobadatabase-seed
-          fi
+          ${optionalSeedScript}
           touch /var/lib/bobaboard/.migrate
         fi
       '';
