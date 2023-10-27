@@ -8,16 +8,15 @@
         ]
       },
       "locked": {
-        "lastModified": 1697501558,
-        "narHash": "sha256-EzJjyOJ8t5aoUSIXHI4x3mMTlveJpKfyoZudPOzDy2U=",
+        "lastModified": 1698012924,
+        "narHash": "sha256-ZCCsZdQ6vAukUeKENzVSM9Bb/rcETBQRHxkJiVa3mMU=",
         "owner": "bobaboard",
         "repo": "boba-backend",
-        "rev": "c17520aff542a9f0d6fa41b7ae941924915e45e4",
+        "rev": "6e2bbd71a4fcd2b9aba2d9042d393582deeac512",
         "type": "github"
       },
       "original": {
         "owner": "bobaboard",
-        "ref": "more-nix",
         "repo": "boba-backend",
         "type": "github"
       }
@@ -30,16 +29,15 @@
         ]
       },
       "locked": {
-        "lastModified": 1694383807,
-        "narHash": "sha256-32L49E+9gF4zCP/Ap7iWY433vVuJSv+B1WPdI+V+CGw=",
+        "lastModified": 1697916111,
+        "narHash": "sha256-QZkAOAUe+q03dCFc7prJsJad9V6eks5AlQnQC3sPADY=",
         "owner": "bobaboard",
         "repo": "boba-frontend",
-        "rev": "2aceaf391819a2155775826ca9894870c1f998ed",
+        "rev": "8888a3cc775de1daff5463ad4611d9eabd951415",
         "type": "github"
       },
       "original": {
         "owner": "bobaboard",
-        "ref": "main",
         "repo": "boba-frontend",
         "type": "github"
       }
