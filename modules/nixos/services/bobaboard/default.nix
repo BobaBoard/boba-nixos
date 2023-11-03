@@ -7,7 +7,7 @@ let
   boolToString = b: if b then "true" else "false";
 
 
-  optionalSeedScript = lib.optionalString cfg.database.seed ''
+  optional-seed-database = lib.optionalString cfg.database.seed ''
     ${bobabackend-packages.bobadatabase-seed}/bin/bobadatabase-seed
   '';
 
@@ -194,7 +194,7 @@ in
       script = ''
         if ! [ -f /var/lib/bobaboard/.migrate ]; then
           ${bobabackend-packages.bobadatabase-init}/bin/bobadatabase-init
-          ${optionalSeedScript}
+          ${optional-seed-database}
           touch /var/lib/bobaboard/.migrate
         fi
       '';
