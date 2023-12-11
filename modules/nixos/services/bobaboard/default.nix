@@ -72,6 +72,31 @@ in
       description = lib.mdDoc "Where the firebase credentials are strored.";
     };
 
+    server = {
+      name = mkOption {
+        type = types.str;
+        description = lib.mdDoc "The NGNIX server name";
+      };
+  
+      backend-address = mkOption {
+        type = types.str;
+        description = lib.mdDoc "The NGINX server address for the backend";
+      };
+
+      env-file = mkOption {
+        type = types.nullOr types.path;
+        description = lib.mdDoc "The path of a file with additional env variables";
+      };
+    };
+
+    dev = {
+      forced-user = mkOption {
+        type = types.nullOr types.str;
+        default = null;
+        description = lib.mdDoc "The dev user any valid credentials will connect as.";
+      };
+    };
+
   };
 
   config = mkIf cfg.enable {
@@ -89,6 +114,32 @@ in
       };
 
       groups.bobaboard = {};
+    };
+
+    security.acme = {
+      acceptTerms = true;
+
+      defaults = {
+        email = "essential.randomn3ss@gmail.com";
+        dnsProvider = "googledomains";
+        dnsPropagationCheck = true;
+
+        # Must be owned by user "acme" and group "nginx"
+        credentialsFile = "/var/lib/acme-secrets/googledomains";
+
+        # Makes certificates readable by nginx
+        group = mkIf config.services.nginx.enable "nginx";
+
+        # Uncomment this to use the staging server
+        server = "https://acme-staging-v02.api.letsencrypt.org/directory";
+
+        # Reload nginx when certs change.
+        reloadServices = lib.optional config.services.nginx.enable "nginx.service";
+      };
+
+      certs."boba.social" = {
+        domain = "*.boba.social";
+      };
     };
 
     services.postgresql = {
@@ -123,7 +174,7 @@ in
         # TODO: the PUBLIC variables will not take effect as they are swapped at build time.
         NEXT_PUBLIC_RELEASE_SUBSCRIPTION_STRING_ID="a87800a6-21e5-46dd-a979-a901cdcea563";
         NEXT_PUBLIC_RELEASE_THREAD_URL="/!memes/thread/2765f36a-b4f9-4efe-96f2-cb34f055d032";
-        DEFAULT_BACKEND="https://twisted-minds.bobaboard.com:6900/";
+        DEFAULT_BACKEND="https://${cfg.server.backend-address}:6900/";
       };
 
       serviceConfig = {
@@ -150,9 +201,11 @@ in
         POSTGRES_PORT=builtins.toString cfg.database.port;
         POSTGRES_SSL_ROOT_CERT_PATH=builtins.toString cfg.database.sslRootCertPath;
         GOOGLE_APPLICATION_CREDENTIALS_PATH=cfg.firebaseCredentials;
-        FORCED_USER="c6HimTlg2RhVH3fC1psXZORdLcx2";
+        FORCED_USER=cfg.dev.forced-user;
         REDIS_HOST="127.0.0.1";
         REDIS_PORT=builtins.toString config.services.redis.servers.bobaboard.port;
+        DB_CONNECTION_TIMEOUT="10000";
+        QUERY_CONNECTION_TIMEOUT="10000";
       };
 
       serviceConfig = {
@@ -204,12 +257,14 @@ in
       enable = true;
       recommendedProxySettings = true;
       recommendedTlsSettings = true;
+      proxyTimeout = "180s";
       virtualHosts."bobaboard-frontend" =  {
-        enableACME = true;
-        forceSSL = true;
-        # TODO: enable configuring the server name
-        serverName = "twisted-minds.bobaboard.com";
-        # TODO: enable configuring the port
+        forceSSL = true; 
+        sslCertificate = "${config.security.acme.certs."boba.social".directory}/fullchain.pem";
+        sslCertificateKey = "${config.security.acme.certs."boba.social".directory}/key.pem";
+
+        serverName = cfg.server.name;
+        # TODO: enable configuring the internal frontend port
         locations."/" = {
           proxyPass = "http://127.0.0.1:3010";
           proxyWebsockets = true; # needed if you need to use WebSocket
@@ -222,26 +277,29 @@ in
         };
       };
       virtualHosts."bobaboard-backend" =  {
-        enableACME = true;
         forceSSL = true;
+        sslCertificate = "${config.security.acme.certs."boba.social".directory}/fullchain.pem";
+        sslCertificateKey = "${config.security.acme.certs."boba.social".directory}/key.pem";
+
         listen = [{
-          # TODO: enable configuring the server name
-          addr = "twisted-minds.bobaboard.com";
+          addr = cfg.server.backend-address;
+          # TODO: enable configuring the external server port
           port = 6900;
           ssl = true;
         }];
-        # TODO: enable configuring the server name
-        serverName = "twisted-minds.bobaboard.com";
+        serverName =  cfg.server.name;
         locations."/" = {
-          # TODO: enable configuring the server port
+          # TODO: enable configuring the internal server port
           proxyPass = "http://127.0.0.1:4200";
           proxyWebsockets = true; # needed if you need to use WebSocket
           extraConfig =
             # required when the target is also TLS server with multiple hosts
             "proxy_ssl_server_name on;" +
             # required when the server wants to use HTTP Authentication
-            "proxy_pass_header Authorization;"
-            ;
+            "proxy_pass_header Authorization;" +
+            "proxy_set_header   X-Real-IP $remote_addr;" +
+            "proxy_set_header   Host      $host;" +
+            "proxy_set_header Connection \"\";";
         };
       };
     };

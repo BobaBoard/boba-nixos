@@ -16,7 +16,7 @@
     enable = true;
     database = {
       user = "bobaboard";
-      host = "db-postgresql-nyc3-75986-do-user-12927016-0.b.db.ondigitalocean.com";
+      host = "private-big-global-dboi-do-user-12927016-0.c.db.ondigitalocean.com";
       local = false;
       port = 25060;
       name = "bobadb";
@@ -24,6 +24,12 @@
       sslRootCertPath = "/var/lib/bobaboard/db-ca";
       seed = true;
     };
+
+    server = {
+      backend-address = "*.boba.social";
+      name =  "^(?<subdomain>.+)\.boba\.social$";
+    };
+
     firebaseCredentials = "/var/lib/bobaboard/firebase-sdk.json";
   };
 
@@ -68,6 +74,12 @@
 
   security.acme.acceptTerms = true;
   security.acme.defaults.email = "essential.randomn3ss@gmail.com";
+
+  nix.gc = {
+    automatic = true;
+    dates = "weekly";
+    options = "--delete-older-than 30d";
+  };
 
   # This value determines the NixOS release from which the default
   # settings for stateful data, like file locations and database versions

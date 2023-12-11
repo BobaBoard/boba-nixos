@@ -2,7 +2,7 @@
   description = "Boba Extras";
 
   inputs = {
-    nixpkgs.url = "github:nixos/nixpkgs?rev=b1f87ca164a9684404c8829b851c3586c4d9f089";
+    nixpkgs.url = "github:nixos/nixpkgs/nixos-23.05";
     unstable.url = "github:nixos/nixpkgs/nixos-unstable";
   
     deploy-rs = {
@@ -15,7 +15,7 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
     boba-backend = {
-      url = "github:bobaboard/boba-backend";
+      url = "github:bobaboard/boba-backend/nixos-fix";
       inputs.nixpkgs.follows = "nixpkgs";
     };
     boba-frontend = {

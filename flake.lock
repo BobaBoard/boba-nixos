@@ -8,15 +8,16 @@
         ]
       },
       "locked": {
-        "lastModified": 1698012924,
-        "narHash": "sha256-ZCCsZdQ6vAukUeKENzVSM9Bb/rcETBQRHxkJiVa3mMU=",
+        "lastModified": 1700605896,
+        "narHash": "sha256-JU10mea7e/o8wIv1NcAqfCKbpv/wjBMjEUJ7CD8+UKA=",
         "owner": "bobaboard",
         "repo": "boba-backend",
-        "rev": "6e2bbd71a4fcd2b9aba2d9042d393582deeac512",
+        "rev": "4cc666f1352647948c4c9161ed8202f8add5cd3e",
         "type": "github"
       },
       "original": {
         "owner": "bobaboard",
+        "ref": "nixos-fix",
         "repo": "boba-backend",
         "type": "github"
       }
@@ -29,11 +30,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1697916111,
-        "narHash": "sha256-QZkAOAUe+q03dCFc7prJsJad9V6eks5AlQnQC3sPADY=",
+        "lastModified": 1698711208,
+        "narHash": "sha256-pDq/mDDu6iZc7DWGFY+d4C4ScsHQ6WsR5OgNBGOkas0=",
         "owner": "bobaboard",
         "repo": "boba-frontend",
-        "rev": "8888a3cc775de1daff5463ad4611d9eabd951415",
+        "rev": "edee766be0f43072871461596f46f9c176ce64db",
         "type": "github"
       },
       "original": {
@@ -185,17 +186,17 @@
     },
     "nixpkgs": {
       "locked": {
-        "lastModified": 1677342105,
-        "narHash": "sha256-kv1fpkfCJGb0M+LZaCHFUuIS9kRIwyVgupHu86Y28nc=",
+        "lastModified": 1701805708,
+        "narHash": "sha256-hh0S14E816Img0tPaNQSEKFvSscSIrvu1ypubtfh6M4=",
         "owner": "nixos",
         "repo": "nixpkgs",
-        "rev": "b1f87ca164a9684404c8829b851c3586c4d9f089",
+        "rev": "0561103cedb11e7554cf34cea81e5f5d578a4753",
         "type": "github"
       },
       "original": {
         "owner": "nixos",
+        "ref": "nixos-23.05",
         "repo": "nixpkgs",
-        "rev": "b1f87ca164a9684404c8829b851c3586c4d9f089",
         "type": "github"
       }
     },

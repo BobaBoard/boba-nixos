@@ -2,8 +2,7 @@
   # This file was populated at runtime with the networking
   # details gathered from the active system.
   networking = {
-    nameservers = [ "8.8.8.8"
- ];
+    nameservers = [ "8.8.8.8" ];
     defaultGateway = "64.225.16.1";
     defaultGateway6 = {
       address = "";
@@ -23,7 +22,12 @@
         ipv4.routes = [ { address = "64.225.16.1"; prefixLength = 32; } ];
         # ipv6.routes = [ { address = ""; prefixLength = 128; } ];
       };
-      
+      eth1 = {
+        # Needed for Digital Ocean VPC
+        # See: https://docs.digitalocean.com/products/networking/vpc/how-to/enable/
+        ipv4.addresses = [ { address="10.108.0.2"; prefixLength=16; } ];
+        macAddress = "0a:39:97:87:ac:a3";
+      };
     };
   };
   services.udev.extraRules = ''
