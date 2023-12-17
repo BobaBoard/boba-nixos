@@ -26,8 +26,11 @@
     };
 
     server = {
-      backend-address = "*.boba.social";
-      name =  "^(?<subdomain>.+)\.boba\.social$";
+      # This has to be an address whose DNS is mapped to this
+      # server. It can be the address of any realm (or of no realm),
+      # as long as the DNS is mapped.
+      backend-address = "fandom-coders.boba.social";
+      name =  "^(?<subdomain>.+)boba\.social$";
     };
 
     firebaseCredentials = "/var/lib/bobaboard/firebase-sdk.json";

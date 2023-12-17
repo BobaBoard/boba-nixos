@@ -7,7 +7,7 @@
   boot = {
     loader.grub.device = "/dev/vda";
 
-    cleanTmpDir = true;
+    tmp.cleanOnBoot = true;
 
     initrd = {
       kernelModules = [ "nvme" ];

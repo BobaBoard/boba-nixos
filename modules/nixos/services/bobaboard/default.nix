@@ -131,7 +131,7 @@ in
         group = mkIf config.services.nginx.enable "nginx";
 
         # Uncomment this to use the staging server
-        server = "https://acme-staging-v02.api.letsencrypt.org/directory";
+        # server = "https://acme-staging-v02.api.letsencrypt.org/directory";
 
         # Reload nginx when certs change.
         reloadServices = lib.optional config.services.nginx.enable "nginx.service";
@@ -282,12 +282,12 @@ in
         sslCertificateKey = "${config.security.acme.certs."boba.social".directory}/key.pem";
 
         listen = [{
-          addr = cfg.server.backend-address;
+          addr = "${cfg.server.backend-address}";
           # TODO: enable configuring the external server port
           port = 6900;
           ssl = true;
         }];
-        serverName =  cfg.server.name;
+        serverName = cfg.server.name;
         locations."/" = {
           # TODO: enable configuring the internal server port
           proxyPass = "http://127.0.0.1:4200";
