@@ -78,9 +78,16 @@ in
         description = lib.mdDoc "The NGNIX server name";
       };
   
-      backend-address = mkOption {
-        type = types.str;
-        description = lib.mdDoc "The NGINX server address for the backend";
+      backend = {
+        address = mkOption {
+          type = types.str;
+          description = lib.mdDoc "The NGINX server address for the backend";
+        };
+        port = mkOption {
+          type = types.port;
+          default = 6900;
+          description = lib.mdDoc "The port used when connecting to the backend host.";
+        };
       };
 
       env-file = mkOption {
@@ -100,11 +107,10 @@ in
   };
 
   config = mkIf cfg.enable {
-    networking.firewall.allowedTCPPorts = [
-      #TODO: configure these with an option
+    networking.firewall.allowedTCPPorts = [ 
       80
       443
-      6900
+      cfg.server.backend.port
     ];
     
     users = {
@@ -121,11 +127,11 @@ in
 
       defaults = {
         email = "essential.randomn3ss@gmail.com";
-        dnsProvider = "googledomains";
+        dnsProvider = "porkbun";
         dnsPropagationCheck = true;
 
         # Must be owned by user "acme" and group "nginx"
-        credentialsFile = "/var/lib/acme-secrets/googledomains";
+        credentialsFile = "/var/lib/acme-secrets/porkbun";
 
         # Makes certificates readable by nginx
         group = mkIf config.services.nginx.enable "nginx";
@@ -174,7 +180,7 @@ in
         # TODO: the PUBLIC variables will not take effect as they are swapped at build time.
         NEXT_PUBLIC_RELEASE_SUBSCRIPTION_STRING_ID="a87800a6-21e5-46dd-a979-a901cdcea563";
         NEXT_PUBLIC_RELEASE_THREAD_URL="/!memes/thread/2765f36a-b4f9-4efe-96f2-cb34f055d032";
-        DEFAULT_BACKEND="https://${cfg.server.backend-address}:6900/";
+        DEFAULT_BACKEND="https://${cfg.server.backend.address}:6900/";
       };
 
       serviceConfig = {
@@ -282,9 +288,8 @@ in
         sslCertificateKey = "${config.security.acme.certs."boba.social".directory}/key.pem";
 
         listen = [{
-          addr = "${cfg.server.backend-address}";
-          # TODO: enable configuring the external server port
-          port = 6900;
+          addr = cfg.server.backend.address; 
+          port = cfg.server.backend.port;
           ssl = true;
         }];
         serverName = cfg.server.name;
