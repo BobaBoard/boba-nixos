@@ -17,6 +17,17 @@ in
   options.services.bobaboard = {
     enable = mkEnableOption "BobaBoard";
 
+    ssl = {
+      certificate = mkOption {
+        type = types.str;
+        description = lib.mdDoc "The path to an SSL certificate on the machine (fullchain.pem)";
+      };
+      key = mkOption {
+        type = types.str;
+        description = lib.mdDoc "The path to the key of an SSL certificate on the machin (key.pem)";
+      };
+    };
+
     database = {
       name = mkOption {
         type = types.str;
@@ -120,32 +131,6 @@ in
       };
 
       groups.bobaboard = {};
-    };
-
-    security.acme = {
-      acceptTerms = true;
-
-      defaults = {
-        email = "essential.randomn3ss@gmail.com";
-        dnsProvider = "porkbun";
-        dnsPropagationCheck = true;
-
-        # Must be owned by user "acme" and group "nginx"
-        credentialsFile = "/var/lib/acme-secrets/porkbun";
-
-        # Makes certificates readable by nginx
-        group = mkIf config.services.nginx.enable "nginx";
-
-        # Uncomment this to use the staging server
-        # server = "https://acme-staging-v02.api.letsencrypt.org/directory";
-
-        # Reload nginx when certs change.
-        reloadServices = lib.optional config.services.nginx.enable "nginx.service";
-      };
-
-      certs."boba.social" = {
-        domain = "*.boba.social";
-      };
     };
 
     services.postgresql = {
@@ -266,8 +251,8 @@ in
       proxyTimeout = "180s";
       virtualHosts."bobaboard-frontend" =  {
         forceSSL = true; 
-        sslCertificate = "${config.security.acme.certs."boba.social".directory}/fullchain.pem";
-        sslCertificateKey = "${config.security.acme.certs."boba.social".directory}/key.pem";
+        sslCertificate = cfg.ssl.certificate;
+        sslCertificateKey = cfg.ssl.key;
 
         serverName = cfg.server.name;
         # TODO: enable configuring the internal frontend port
@@ -284,8 +269,8 @@ in
       };
       virtualHosts."bobaboard-backend" =  {
         forceSSL = true;
-        sslCertificate = "${config.security.acme.certs."boba.social".directory}/fullchain.pem";
-        sslCertificateKey = "${config.security.acme.certs."boba.social".directory}/key.pem";
+        sslCertificate = cfg.ssl.certificate;
+        sslCertificateKey = cfg.ssl.key;
 
         listen = [{
           addr = cfg.server.backend.address; 
