@@ -2,7 +2,7 @@
   description = "Boba Extras";
 
   inputs = {
-    nixpkgs.url = "github:nixos/nixpkgs/nixos-23.05";
+    nixpkgs.url = "github:nixos/nixpkgs/nixos-24.05";
     unstable.url = "github:nixos/nixpkgs/nixos-unstable";
   
     deploy-rs = {
@@ -47,7 +47,7 @@
         };
       };
   
-      systems.modules = with inputs; [
+      systems.modules.nixos = with inputs; [
         vscode-server.nixosModules.default
       ];
 
