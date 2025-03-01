@@ -136,7 +136,7 @@ in
     services.postgresql = {
       enable = cfg.database.local;
       # TODO: configure this with an option
-      package = pkgs.postgresql_12;
+      package = pkgs.postgresql_14;
       enableTCPIP = true;
       authentication = pkgs.lib.mkOverride 10 ''
         local all all trust

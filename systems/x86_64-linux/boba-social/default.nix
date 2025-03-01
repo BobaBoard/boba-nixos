@@ -1,4 +1,4 @@
-{ pkgs, inputs, config,  environment, ... }: {
+{ pkgs, inputs, unstable, config, lib, environment, ... } : {
   imports = [
     ./hardware.nix
     # Generated at runtime by nixos-infect
@@ -10,10 +10,6 @@
   services.tailscale.enable = true;
   networking.firewall.allowedTCPPorts = [
     22
-  ];
-
-  environment.systemPackages = with pkgs; [
-    inputs.unstable.lego
   ];
 
 
