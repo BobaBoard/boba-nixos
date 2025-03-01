@@ -1,4 +1,4 @@
-{ pkgs, inputs, unstable, config, lib, environment, ... } : {
+{ pkgs, inputs, config, lib, environment, ... } : {
   imports = [
     ./hardware.nix
     # Generated at runtime by nixos-infect
@@ -12,6 +12,9 @@
     22
   ];
 
+  nixpkgs.config.packageOverrides = pkgs: {
+    lego = inputs.nixpkgs-unstable.legacyPackages.${pkgs.system}.lego;
+  };
 
   services.bobaboard = {
     enable = true;
