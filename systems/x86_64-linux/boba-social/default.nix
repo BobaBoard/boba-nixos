@@ -1,4 +1,4 @@
-{ pkgs, inputs, config,  ... }: {
+{ pkgs, inputs, config,  environment, ... }: {
   imports = [
     ./hardware.nix
     # Generated at runtime by nixos-infect
@@ -11,6 +11,11 @@
   networking.firewall.allowedTCPPorts = [
     22
   ];
+
+  environment.systemPackages = with pkgs; [
+    unstable.lego
+  ];
+
 
   services.bobaboard = {
     enable = true;
