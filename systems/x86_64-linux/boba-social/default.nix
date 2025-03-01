@@ -13,7 +13,7 @@
   ];
 
   environment.systemPackages = with pkgs; [
-    unstable.lego
+    inputs.unstable.lego
   ];
 
 
