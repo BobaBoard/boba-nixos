@@ -13,7 +13,7 @@
   ];
 
   nixpkgs.config.packageOverrides = pkgs: {
-    lego = inputs.nixpkgs-unstable.legacyPackages.${pkgs.system}.lego;
+    lego = inputs.unstable.legacyPackages.${pkgs.system}.lego;
   };
 
   services.bobaboard = {
